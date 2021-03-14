@@ -3,32 +3,39 @@ package com.techyourchance.dagger2course.screens.questiondetails
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import com.techyourchance.dagger2course.common.dependencyinjection.Service
 import com.techyourchance.dagger2course.questions.FetchQuestionDetailsUseCase
 import com.techyourchance.dagger2course.screens.common.ScreensNavigator
 import com.techyourchance.dagger2course.screens.common.activities.BaseActivity
 import com.techyourchance.dagger2course.screens.common.dialogs.DialogsNavigator
+import com.techyourchance.dagger2course.screens.common.viewsmvc.ViewMvcFactory
 import kotlinx.coroutines.*
 
 class QuestionDetailsActivity : BaseActivity(), QuestionDetailsViewMvc.Listener {
 
     private val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
 
+    @field:Service
     private lateinit var fetchQuestionDetailsUseCase: FetchQuestionDetailsUseCase
+
+    @field:Service
     private lateinit var dialogsNavigator: DialogsNavigator
+
+    @field:Service
     private lateinit var screensNavigator: ScreensNavigator
+
+    @field:Service
+    private lateinit var viewMvcFactory: ViewMvcFactory
 
     private lateinit var viewMvc: QuestionDetailsViewMvc
 
     private lateinit var questionId: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        injector.inject(this)
         super.onCreate(savedInstanceState)
-        viewMvc = compositionRoot.viewMvcFactory.newQuestionDetailsViewMvc(null)
+        viewMvc = viewMvcFactory.newQuestionDetailsViewMvc(null)
         setContentView(viewMvc.rootView)
-
-        fetchQuestionDetailsUseCase = compositionRoot.fetchQuestionDetailsUseCase
-        dialogsNavigator = compositionRoot.dialogsNavigator
-        screensNavigator = compositionRoot.screensNavigator
 
         questionId = intent.extras!!.getString(EXTRA_QUESTION_ID)!!
     }
@@ -50,7 +57,7 @@ class QuestionDetailsActivity : BaseActivity(), QuestionDetailsViewMvc.Listener 
             viewMvc.showProgressIndication()
             try {
                 val result = fetchQuestionDetailsUseCase.fetchQuestion(questionId)
-                when(result) {
+                when (result) {
                     is FetchQuestionDetailsUseCase.Result.Success -> {
                         viewMvc.bindQuestionBody(result.question.body)
                     }

@@ -1,4 +1,4 @@
-package com.techyourchance.dagger2course.common.composition
+package com.techyourchance.dagger2course.common.dependencyinjection
 
 import com.techyourchance.dagger2course.questions.FetchQuestionDetailsUseCase
 import com.techyourchance.dagger2course.questions.FetchQuestionsUseCase
@@ -12,6 +12,8 @@ class PresentationCompositionRoot(private val activityCompositionRoot: ActivityC
     private val fragmentManager get() = activityCompositionRoot.fragmentManager
 
     private val stackoverflowApi get() = activityCompositionRoot.stackoverflowApi
+
+    private val activity get() = activityCompositionRoot.activity
 
     val screensNavigator get() = activityCompositionRoot.screensNavigator
 
