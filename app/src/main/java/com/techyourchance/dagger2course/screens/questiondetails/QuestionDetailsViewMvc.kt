@@ -4,19 +4,23 @@ import android.os.Build
 import android.text.Html
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.techyourchance.dagger2course.R
+import com.techyourchance.dagger2course.questions.QuestionWithBody
+import com.techyourchance.dagger2course.screens.common.imageloader.ImageLoader
 import com.techyourchance.dagger2course.screens.common.toolbar.MyToolbar
 import com.techyourchance.dagger2course.screens.common.viewsmvc.BaseViewMvc
 
 class QuestionDetailsViewMvc(
-        layoutInflater: LayoutInflater,
-        parent: ViewGroup?
-): BaseViewMvc<QuestionDetailsViewMvc.Listener>(
-        layoutInflater,
-        parent,
-        R.layout.layout_question_details
+    layoutInflater: LayoutInflater,
+    private val imageLoader: ImageLoader,
+    parent: ViewGroup?
+) : BaseViewMvc<QuestionDetailsViewMvc.Listener>(
+    layoutInflater,
+    parent,
+    R.layout.layout_question_details
 ) {
 
     interface Listener {
@@ -26,9 +30,13 @@ class QuestionDetailsViewMvc(
     private val toolbar: MyToolbar
     private val swipeRefresh: SwipeRefreshLayout
     private val txtQuestionBody: TextView
+    private val imgUser: ImageView
+    private val txtUserName: TextView
 
     init {
         txtQuestionBody = findViewById(R.id.txt_question_body)
+        imgUser = findViewById(R.id.img_user)
+        txtUserName = findViewById(R.id.txt_user_name)
 
         // init toolbar
         toolbar = findViewById(R.id.toolbar)
@@ -43,13 +51,15 @@ class QuestionDetailsViewMvc(
         swipeRefresh.isEnabled = false
     }
 
-    fun bindQuestionBody(questionBody: String) {
+    fun bindQuestionWithBody(question: QuestionWithBody) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            txtQuestionBody.text = Html.fromHtml(questionBody, Html.FROM_HTML_MODE_LEGACY)
+            txtQuestionBody.text = Html.fromHtml(question.body, Html.FROM_HTML_MODE_LEGACY)
         } else {
             @Suppress("DEPRECATION")
-            txtQuestionBody.text = Html.fromHtml(questionBody)
+            txtQuestionBody.text = Html.fromHtml(question.body)
         }
+        imageLoader.loadImage(question.owner.imageUrl, imgUser)
+        txtUserName.text = question.owner.name
     }
 
     fun showProgressIndication() {
