@@ -2,11 +2,12 @@ package com.techyourchance.dagger2course
 
 import com.techyourchance.dagger2course.common.dependencyinjection.app.AppModule
 import android.app.Application
+import com.techyourchance.dagger2course.common.dependencyinjection.app.AppComponent
 import com.techyourchance.dagger2course.common.dependencyinjection.app.DaggerAppComponent
 
 class MyApplication: Application() {
 
-    public val appComponent by lazy {
+    public val appComponent:AppComponent by lazy {
         DaggerAppComponent.builder()
             .appModule(AppModule(this))
             .build()
