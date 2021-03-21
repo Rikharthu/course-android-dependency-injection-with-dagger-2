@@ -3,19 +3,24 @@ package com.techyourchance.dagger2course.screens.viewmodel
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
+import android.widget.Toast
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.techyourchance.dagger2course.R
-import com.techyourchance.dagger2course.questions.FetchQuestionDetailsUseCase
 import com.techyourchance.dagger2course.screens.common.ScreensNavigator
 import com.techyourchance.dagger2course.screens.common.activities.BaseActivity
-import com.techyourchance.dagger2course.screens.common.dialogs.DialogsNavigator
 import com.techyourchance.dagger2course.screens.common.toolbar.MyToolbar
-import com.techyourchance.dagger2course.screens.common.viewsmvc.ViewMvcFactory
-import kotlinx.coroutines.*
 import javax.inject.Inject
 
 class ViewModelActivity : BaseActivity() {
 
-    @Inject lateinit var screensNavigator: ScreensNavigator
+    @Inject
+    lateinit var screensNavigator: ScreensNavigator
+
+    @Inject
+    lateinit var viewModelFactory: MyViewModel.Factory
+    private lateinit var viewModel: MyViewModel
 
     private lateinit var toolbar: MyToolbar
 
@@ -24,11 +29,19 @@ class ViewModelActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.layout_view_model)
-
         toolbar = findViewById(R.id.toolbar)
         toolbar.setNavigateUpListener {
             screensNavigator.navigateBack()
         }
+
+        viewModel = ViewModelProvider(this, viewModelFactory)
+            .get(MyViewModel::class.java)
+
+        Log.d("ViewModelActivity", "ViewModel instance: $viewModel")
+
+        viewModel.questions.observe(this, Observer {
+            Toast.makeText(this, "Fetched ${it.size} questions", Toast.LENGTH_SHORT).show()
+        })
     }
 
     companion object {
