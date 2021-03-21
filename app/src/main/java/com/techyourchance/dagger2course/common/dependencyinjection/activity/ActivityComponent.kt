@@ -15,7 +15,7 @@ interface ActivityComponent {
     interface Builder {
         fun build(): ActivityComponent
 
-        fun activityModule(activityModule: ActivityModule): Builder
+//        fun activityModule(activityModule: ActivityModule): Builder
 
 
         // Individual dependencies

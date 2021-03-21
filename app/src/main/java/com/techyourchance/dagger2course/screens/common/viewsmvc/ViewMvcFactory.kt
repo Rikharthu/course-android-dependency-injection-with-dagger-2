@@ -6,10 +6,11 @@ import com.techyourchance.dagger2course.screens.common.imageloader.ImageLoader
 import com.techyourchance.dagger2course.screens.questiondetails.QuestionDetailsViewMvc
 import com.techyourchance.dagger2course.screens.questionslist.QuestionsListViewMvc
 import javax.inject.Inject
+import javax.inject.Provider
 
 class ViewMvcFactory @Inject constructor(
     private val layoutInflater: LayoutInflater,
-    private val imageLoader: ImageLoader
+    private val imageLoaderProvider: Provider<ImageLoader>
 ) {
 
     fun newQuestionsListViewMvc(parent: ViewGroup?): QuestionsListViewMvc {
@@ -17,6 +18,6 @@ class ViewMvcFactory @Inject constructor(
     }
 
     fun newQuestionDetailsViewMvc(parent: ViewGroup?): QuestionDetailsViewMvc {
-        return QuestionDetailsViewMvc(layoutInflater, imageLoader, parent)
+        return QuestionDetailsViewMvc(layoutInflater, imageLoaderProvider.get(), parent)
     }
 }
