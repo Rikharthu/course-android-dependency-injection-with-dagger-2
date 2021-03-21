@@ -11,6 +11,7 @@ import com.techyourchance.dagger2course.R
 import com.techyourchance.dagger2course.screens.common.ScreensNavigator
 import com.techyourchance.dagger2course.screens.common.activities.BaseActivity
 import com.techyourchance.dagger2course.screens.common.toolbar.MyToolbar
+import com.techyourchance.dagger2course.screens.common.viewmodel.ViewModelFactory
 import javax.inject.Inject
 
 class ViewModelActivity : BaseActivity() {
@@ -19,7 +20,7 @@ class ViewModelActivity : BaseActivity() {
     lateinit var screensNavigator: ScreensNavigator
 
     @Inject
-    lateinit var viewModelFactory: MyViewModel.Factory
+    lateinit var viewModelFactory: ViewModelFactory
     private lateinit var viewModel: MyViewModel
 
     private lateinit var toolbar: MyToolbar
